@@ -25,6 +25,6 @@
     "src/**/*.js",
     "scripts/**/*.mjs",
     "scripts/**/*.js",
-    "*.js",
+    "*.js"
   ]
 }

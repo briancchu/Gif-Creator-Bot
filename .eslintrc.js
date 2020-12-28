@@ -1,16 +1,14 @@
 module.exports = {
   root: true,
   env: {
-    browser: true
   },
   plugins: [
     '@typescript-eslint',
-    'import'
+    'import',
   ],
   parserOptions: {
     project: ['./tsconfig.json'],
     sourceType: 'module',
-    extraFileExtensions: ['.mjs'],
   },
   extends: [
     'plugin:@typescript-eslint/eslint-recommended',
@@ -28,11 +26,13 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': ['off'],
     '@typescript-eslint/unbound-method': ['off'],
     '@typescript-eslint/no-unnecessary-condition': ['warn', { allowConstantLoopConditions: true }],
-    '@typescript-eslint/restrict-template-expressions': ['warn', {
-      allowNumber: true,
-      allowBoolean: true,
-      allowAny: true,
-    }],
+    '@typescript-eslint/restrict-template-expressions': [
+      'warn', {
+        allowNumber: true,
+        allowBoolean: true,
+        allowAny: true,
+      },
+    ],
     '@typescript-eslint/prefer-for-of': ['warn'],
     '@typescript-eslint/prefer-regexp-exec': ['warn'],
     '@typescript-eslint/prefer-function-type': ['error'],
@@ -75,15 +75,15 @@ module.exports = {
           'public-abstract-field',
           'private-abstract-method',
           'protected-abstract-method',
-          'public-abstract-method'
-        ]
-      }
+          'public-abstract-method',
+        ],
+      },
     ],
     '@typescript-eslint/explicit-member-accessibility': [
       'error',
       {
-        accessibility: 'explicit'
-      }
+        accessibility: 'explicit',
+      },
     ],
     '@typescript-eslint/prefer-readonly': ['warn'],
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
@@ -116,9 +116,24 @@ module.exports = {
     'dot-location': ['warn', 'property'],
     'block-spacing': ['error', 'always'],
     'key-spacing': ['error'],
-    'semi-spacing': ['error', { before: false, after: true }],
-    'comma-spacing': ['error', { before: false, after: true }],
-    '@typescript-eslint/keyword-spacing': ['error', { before: true, after: true }],
+    'semi-spacing': [
+      'error', {
+        before: false,
+        after: true,
+      },
+    ],
+    'comma-spacing': [
+      'error', {
+        before: false,
+        after: true,
+      },
+    ],
+    '@typescript-eslint/keyword-spacing': [
+      'error', {
+        before: true,
+        after: true,
+      },
+    ],
     'object-curly-spacing': ['error', 'always'],
     'array-bracket-spacing': ['error', 'never'],
     'computed-property-spacing': ['error', 'never'],
@@ -129,21 +144,30 @@ module.exports = {
     '@typescript-eslint/func-call-spacing': ['error', 'never'],
     'generator-star-spacing': ['error', 'both'],
     'yield-star-spacing': ['error', 'both'],
-    'space-infix-ops': ['error', { "int32Hint": false }],
+    'space-infix-ops': ['error', { int32Hint: false }],
     '@typescript-eslint/indent': [
       'error',
       2,
       {
-        ignoredNodes: [
-          'TemplateLiteral'
-        ]
-      }
+        ignoredNodes: ['TemplateLiteral'],
+      },
     ],
 
     // newline rules
-    'object-curly-newline': ['error', { multiline: true, minProperties: 4, consistent: true }],
+    'object-curly-newline': [
+      'error', {
+        multiline: true,
+        minProperties: 4,
+        consistent: true,
+      },
+    ],
     'object-property-newline': ['error'],
-    'array-bracket-newline': ['error', { multiline: true, minItems: 4 }],
+    'array-bracket-newline': [
+      'error', {
+        multiline: true,
+        minItems: 4,
+      },
+    ],
     'function-call-argument-newline': ['error', 'consistent'],
     'lines-between-class-members': ['error', 'always'],
     'operator-linebreak': ['error', 'before', { overrides: { '=': 'after' } }],
@@ -156,10 +180,15 @@ module.exports = {
         arrays: 'always-multiline',
         imports: 'always-multiline',
         exports: 'always-multiline',
-        functions: 'never'
-      }
+        functions: 'never',
+      },
     ],
-    '@typescript-eslint/comma-spacing': ['error', { before: false, after: true }],
+    '@typescript-eslint/comma-spacing': [
+      'error', {
+        before: false,
+        after: true,
+      },
+    ],
     '@typescript-eslint/semi': ['error', 'always'],
     '@typescript-eslint/no-extra-semi': ['error'],
 
@@ -176,6 +205,6 @@ module.exports = {
     // 'import/no-duplicates': ['warn'],
     // 'import/order': ['error', { 'newlines-between': 'always' }],
     // 'import/newline-after-import': ['warn'],
-    'max-classes-per-file': ['warn', 2]
-  }
-}
+    'max-classes-per-file': ['warn', 2],
+  },
+};
