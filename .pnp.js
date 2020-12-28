@@ -41,6 +41,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["discord.js", "npm:12.5.1"],
             ["eslint", "npm:7.16.0"],
+            ["omggif", "npm:1.0.10"],
+            ["three", "npm:0.124.0"],
+            ["three-software-renderer", "npm:1.2.0"],
             ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"]
           ],
           "linkType": "SOFT",
@@ -959,6 +962,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["discord.js", "npm:12.5.1"],
             ["eslint", "npm:7.16.0"],
+            ["omggif", "npm:1.0.10"],
+            ["three", "npm:0.124.0"],
+            ["three-software-renderer", "npm:1.2.0"],
             ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"]
           ],
           "linkType": "SOFT",
@@ -1276,6 +1282,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["omggif", [
+        ["npm:1.0.10", {
+          "packageLocation": "./.yarn/cache/omggif-npm-1.0.10-6ffa5bf343-a871594f9e.zip/node_modules/omggif/",
+          "packageDependencies": [
+            ["omggif", "npm:1.0.10"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["once", [
         ["npm:1.4.0", {
           "packageLocation": "./.yarn/cache/once-npm-1.4.0-ccf03ef07a-57afc24653.zip/node_modules/once/",
@@ -1589,6 +1604,32 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/text-table-npm-0.2.0-d92a778b59-373904ce70.zip/node_modules/text-table/",
           "packageDependencies": [
             ["text-table", "npm:0.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["three", [
+        ["npm:0.124.0", {
+          "packageLocation": "./.yarn/cache/three-npm-0.124.0-721edad415-704b381c20.zip/node_modules/three/",
+          "packageDependencies": [
+            ["three", "npm:0.124.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:0.82.1", {
+          "packageLocation": "./.yarn/cache/three-npm-0.82.1-5564a9b6d0-e18da098bb.zip/node_modules/three/",
+          "packageDependencies": [
+            ["three", "npm:0.82.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["three-software-renderer", [
+        ["npm:1.2.0", {
+          "packageLocation": "./.yarn/cache/three-software-renderer-npm-1.2.0-a170472eeb-02210d5d4d.zip/node_modules/three-software-renderer/",
+          "packageDependencies": [
+            ["three-software-renderer", "npm:1.2.0"],
+            ["three", "npm:0.82.1"]
           ],
           "linkType": "HARD",
         }]

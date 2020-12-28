@@ -747,6 +747,9 @@ __metadata:
     "@typescript-eslint/parser": ^4.11.0
     discord.js: ^12.5.1
     eslint: ^7.16.0
+    omggif: ^1.0.10
+    three: ^0.124.0
+    three-software-renderer: ^1.2.0
     typescript: ^4.1.3
   languageName: unknown
   linkType: soft
@@ -1018,6 +1021,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"omggif@npm:^1.0.10":
+  version: 1.0.10
+  resolution: "omggif@npm:1.0.10"
+  checksum: a871594f9e90eaf467b1d3047bf541bedb07ba8a83ba9a097ae4e6343889e0ab494a8581bc34e522ae5513834af55edfaca7d16e3df7b48110c49b46526f215c
+  languageName: node
+  linkType: hard
+
 "once@npm:^1.3.0":
   version: 1.4.0
   resolution: "once@npm:1.4.0"
@@ -1279,6 +1289,29 @@ __metadata:
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
   checksum: 373904ce70524ba11ec7e1905c44fb92671132d5e0b0aba2fb48057161f8bf9cbf7f6178f0adf31810150cf44fb52c7b912dc722bff3fddf9688378596dbeb56
+  languageName: node
+  linkType: hard
+
+"three-software-renderer@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "three-software-renderer@npm:1.2.0"
+  dependencies:
+    three: ^0.82.1
+  checksum: 02210d5d4d931e23e536072f66cd6007e8b226a2ac7261455c5ea3e1be36d33ed0a50ac2327f7ff3047c355651c32941e2d6e012da7174ffcfd5c876d4c43ee0
+  languageName: node
+  linkType: hard
+
+"three@npm:^0.124.0":
+  version: 0.124.0
+  resolution: "three@npm:0.124.0"
+  checksum: 704b381c2013d31079c78e50249086dddd133ceacf1b431edff4116507ab799700f493db48e21817a380ecee3f69f20cef69de5b416f246e9533a085f436804e
+  languageName: node
+  linkType: hard
+
+"three@npm:^0.82.1":
+  version: 0.82.1
+  resolution: "three@npm:0.82.1"
+  checksum: e18da098bb5bbd92637950acbf04e66e426b5ce15805540fa02aec933d435e54efd8fa258914c6b44e2dc57b9c2459aed2d73b60320ed0a5c6290e06dede5694
   languageName: node
   linkType: hard
 
