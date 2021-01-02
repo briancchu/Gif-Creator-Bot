@@ -69,6 +69,10 @@ export async function runRenderer(input: string): Promise<void> {
   command.inputOption('-pixel_format rgba');
   command.inputOption('-framerate 60');
   command.inputOption(`-video_size ${WIDTH}x${HEIGHT}`);
+  command.outputOption('-c:v libx264');
+  command.outputOption('-crf 10');
+  command.outputOption('-b:v 1M');
+  command.outputOption('-pix_fmt yuv420p');
   command.output('test.mp4');
 
   // return a Promise that resolves when FFMpeg exits
