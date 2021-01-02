@@ -3,6 +3,8 @@ import ffmpeg from 'fluent-ffmpeg';
 import * as THREE from 'three';
 import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
+import { promises } from 'fs';
+const { readFile } = promises;
 
 export async function runRenderer(input: string): Promise<void> {
   // How many frames and how large shall the GIF be?
@@ -21,14 +23,41 @@ export async function runRenderer(input: string): Promise<void> {
     context: ctx,
   });
 
-  cam.position.z = 100;
+  cam.position.z = 300;
 
   const box = new THREE.Mesh(
     new THREE.BoxGeometry(30, 30, 30),
     new THREE.MeshBasicMaterial({ color: 0xff0000 })
   );
 
-  scene.add(box);
+  const fontjson = await readFile('src/fonts/Roboto_Bold.json', 'utf-8');
+  const font = new THREE.Font(JSON.parse(fontjson));
+
+  const geometry = new THREE.TextGeometry('Text!', {
+    font: font,
+    size: 80,
+    height: 10,
+    curveSegments: 12,
+    bevelEnabled: false,
+    bevelThickness: 10,
+    bevelSize: 8,
+    bevelOffset: 0,
+    bevelSegments: 5,
+  });
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.125);
+  dirLight.position.set(0, 0, 1).normalize();
+  scene.add(dirLight);
+
+  const pointLight = new THREE.PointLight(0xffffff, 1.5);
+  pointLight.position.set(0, 100, 90);
+  scene.add(pointLight);
+
+  const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+  const mesh = new THREE.Mesh(geometry, material);
+
+  mesh.rotation.x += (Math.PI / 180) * 180;
+  scene.add(mesh);
 
   // create a stream that will send the data we send to it into FFMpeg
   const stream = new PassThrough({ objectMode: false });
@@ -40,7 +69,7 @@ export async function runRenderer(input: string): Promise<void> {
   command.inputOption('-pixel_format rgba');
   command.inputOption('-framerate 60');
   command.inputOption(`-video_size ${WIDTH}x${HEIGHT}`);
-  command.output('output.mp4');
+  command.output('test.mp4');
 
   // return a Promise that resolves when FFMpeg exits
   return new Promise((resolve, reject) => {
