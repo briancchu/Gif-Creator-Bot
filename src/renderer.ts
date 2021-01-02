@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
 
-export async function runRenderer(): Promise<void> {
+export async function runRenderer(input: string): Promise<void> {
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
 
@@ -40,12 +40,12 @@ export async function runRenderer(): Promise<void> {
   command.inputOption('-pixel_format rgba');
   command.inputOption('-framerate 60');
   command.inputOption(`-video_size ${WIDTH}x${HEIGHT}`);
-  command.output('test.mp4');
+  command.output('output.mp4');
 
   // return a Promise that resolves when FFMpeg exits
   return new Promise((resolve, reject) => {
-    command.on('end', () =>  resolve());
-    command.on('error', (err) =>  reject(err));
+    command.on('end', () => resolve());
+    command.on('error', (err) => reject(err));
     command.run();
 
     for (let frame = 0; frame < NUM_FRAMES; frame++) {
