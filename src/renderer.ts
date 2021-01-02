@@ -35,7 +35,7 @@ export async function runRenderer(input: string): Promise<void> {
 
   const textGeometry = new THREE.TextGeometry(input, {
     font: font,
-    size: 80,
+    size: 30,
     height: 10,
     curveSegments: 12,
     bevelEnabled: false,
@@ -44,6 +44,7 @@ export async function runRenderer(input: string): Promise<void> {
   textGeometry.computeBoundingBox();
   const textWidth = textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x;
   const textHeight = textGeometry.boundingBox!.max.y - textGeometry.boundingBox!.min.y;
+  textGeometry.translate(-textWidth / 2, -textHeight / 2, 0);
 
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.125);
   dirLight.position.set(0, 0, 1).normalize();
@@ -57,8 +58,6 @@ export async function runRenderer(input: string): Promise<void> {
   const mesh = new THREE.Mesh(textGeometry, material);
 
   mesh.rotation.x = (Math.PI / 180) * 180;
-  mesh.position.x = -textWidth / 2;
-  mesh.position.y = textHeight / 2;
 
   scene.add(mesh);
 
@@ -85,8 +84,8 @@ export async function runRenderer(input: string): Promise<void> {
     command.run();
 
     for (let frame = 0; frame < NUM_FRAMES; frame++) {
-      box.rotation.y += Math.PI / 100;
-      box.material.color.offsetHSL(0.01, 0, 0);
+      mesh.rotation.y += Math.PI / 100;
+      mesh.material.color.offsetHSL(0.01, 0, 0);
 
       renderer.render(scene, cam); // render a frame in memory
 
