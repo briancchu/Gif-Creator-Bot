@@ -33,17 +33,17 @@ export async function runRenderer(input: string): Promise<void> {
   const fontjson = await readFile('src/fonts/Roboto_Bold.json', 'utf-8');
   const font = new THREE.Font(JSON.parse(fontjson));
 
-  const geometry = new THREE.TextGeometry('Text!', {
+  const textGeometry = new THREE.TextGeometry(input, {
     font: font,
     size: 80,
     height: 10,
     curveSegments: 12,
     bevelEnabled: false,
-    bevelThickness: 10,
-    bevelSize: 8,
-    bevelOffset: 0,
-    bevelSegments: 5,
   });
+
+  textGeometry.computeBoundingBox();
+  const textWidth = textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x;
+  const textHeight = textGeometry.boundingBox!.max.y - textGeometry.boundingBox!.min.y;
 
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.125);
   dirLight.position.set(0, 0, 1).normalize();
@@ -54,9 +54,12 @@ export async function runRenderer(input: string): Promise<void> {
   scene.add(pointLight);
 
   const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
-  const mesh = new THREE.Mesh(geometry, material);
+  const mesh = new THREE.Mesh(textGeometry, material);
 
-  mesh.rotation.x += (Math.PI / 180) * 180;
+  mesh.rotation.x = (Math.PI / 180) * 180;
+  mesh.position.x = -textWidth / 2;
+  mesh.position.y = textHeight / 2;
+
   scene.add(mesh);
 
   // create a stream that will send the data we send to it into FFMpeg
@@ -73,7 +76,7 @@ export async function runRenderer(input: string): Promise<void> {
   command.outputOption('-crf 10');
   command.outputOption('-b:v 1M');
   command.outputOption('-pix_fmt yuv420p');
-  command.output('test.mp4');
+  command.output('output.mp4');
 
   // return a Promise that resolves when FFMpeg exits
   return new Promise((resolve, reject) => {
