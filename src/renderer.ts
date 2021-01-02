@@ -1,12 +1,11 @@
-import { writeFileSync } from 'fs';
-import { writeFile } from 'fs/promises';
 import gl from 'gl';
-import { GifWriter } from 'omggif';
+import ffmpeg from 'fluent-ffmpeg';
 import * as THREE from 'three';
 import { FakeCanvas } from './util/canvas';
+import { PassThrough } from 'stream';
 
-export async function runRenderer() {
-// How many frames and how large shall the GIF be?
+export async function runRenderer(): Promise<void> {
+  // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
 
   // create headless WebGL1 context
@@ -31,45 +30,40 @@ export async function runRenderer() {
 
   scene.add(box);
 
-  // GIF has a color palette of 256 possible colours, we're fixing them to two.
-  // TODO: Generate the palette automatically from the scene
-  const palette = [0x000000, 0xff0000];
+  // create a stream that will send the data we send to it into FFMpeg
+  const stream = new PassThrough({ objectMode: false });
 
-  const gifBuffer = Buffer.alloc(WIDTH * HEIGHT * NUM_FRAMES); // holds the entire GIF output
+  // create an FFMpeg command that will process the stream as a 'raw video' in
+  // RGBA format and produce a WebM-encoded video
+  const command = ffmpeg(stream);
+  command.inputFormat('rawvideo');
+  command.inputOption('-pixel_format rgba');
+  command.inputOption('-framerate 60');
+  command.inputOption(`-video_size ${WIDTH}x${HEIGHT}`);
+  command.output('test.mp4');
 
-  const gif = new GifWriter(gifBuffer, WIDTH, HEIGHT, {
-    palette: palette,
-    loop: 0,
-  });
+  // return a Promise that resolves when FFMpeg exits
+  return new Promise((resolve, reject) => {
+    command.on('end', () =>  resolve());
+    command.on('error', (err) =>  reject(err));
+    command.run();
 
-  for (let frame = 0; frame < NUM_FRAMES; frame++) {
-    box.rotation.y += Math.PI / 100;
+    for (let frame = 0; frame < NUM_FRAMES; frame++) {
+      box.rotation.y += Math.PI / 100;
+      box.material.color.offsetHSL(0.01, 0, 0);
 
-    renderer.render(scene, cam); // render a frame in memory
+      renderer.render(scene, cam); // render a frame in memory
 
-    const pixels = new Uint8Array(WIDTH * HEIGHT * 4);
+      // create a buffer to contain the pixels
+      const pixels = new Uint8Array(WIDTH * HEIGHT * 4);
 
-    ctx.readPixels(0, 0, WIDTH, HEIGHT, ctx.RGBA, ctx.UNSIGNED_BYTE, pixels);
+      // copy the pixels to the buffer
+      ctx.readPixels(0, 0, WIDTH, HEIGHT, ctx.RGBA, ctx.UNSIGNED_BYTE, pixels);
 
-    // for each frame of the GIF we'll have to convert the RGBA pixels into palette indices
-    gif.addFrame(0, 0, WIDTH, WIDTH, convertRGBAto8bit(pixels, palette) as any);
-  }
-
-  await writeFile('./test.gif', gifBuffer.slice(0, gif.end()));
-}
-
-function convertRGBAto8bit(rgbaBuffer: Uint8Array, palette: number[]) {
-  const outputBuffer = new Uint8Array(rgbaBuffer.length / 4);
-
-  for (let i = 0; i < rgbaBuffer.length; i += 4) {
-    const colour = (rgbaBuffer[i] << 16) + (rgbaBuffer[i + 1] << 8) + rgbaBuffer[i + 2];
-    for (let p = 0; p < palette.length; p++) {
-      if (colour === palette[p]) {
-        outputBuffer[i / 4] = p;
-        break;
-      }
+      // send the buffer to FFMpeg
+      stream.write(pixels);
     }
-  }
 
-  return outputBuffer;
+    stream.end();
+  });
 }

@@ -1,7 +1,6 @@
 import { Client, MessageAttachment } from 'discord.js';
 
 export async function runBot() {
-
   const client = new Client();
 
   client.on('ready', () => {
@@ -15,9 +14,10 @@ export async function runBot() {
   });
 
   client.on('message', async message => {
-  // If the message is '!rip'
+    // If the message is '!rip'
+
     if (message.content === '!rip') {
-    // Create the attachment using MessageAttachment
+      // Create the attachment using MessageAttachment
       const attachment = new MessageAttachment('https://i.imgur.com/w3duR07.png');
       // Send the attachment in the message channel
       await message.channel.send(attachment);

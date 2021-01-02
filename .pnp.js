@@ -37,19 +37,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
+            ["@types/fluent-ffmpeg", "npm:2.1.16"],
             ["@types/gl", "npm:4.1.0"],
             ["@types/node", "npm:14.14.16"],
-            ["@types/omggif", "npm:1.0.1"],
             ["@typescript-eslint/eslint-plugin", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["@typescript-eslint/parser", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["discord.js", "npm:12.5.1"],
             ["eslint", "npm:7.16.0"],
             ["eslint-plugin-import", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:2.22.1"],
             ["event-target-shim", "npm:5.0.1"],
+            ["fluent-ffmpeg", "npm:2.1.2"],
             ["gl", "npm:4.9.0"],
-            ["omggif", "npm:1.0.10"],
             ["three", "npm:0.124.0"],
-            ["three-software-renderer", "npm:1.2.0"],
             ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"]
           ],
           "linkType": "SOFT",
@@ -157,6 +156,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/fluent-ffmpeg", [
+        ["npm:2.1.16", {
+          "packageLocation": "./.yarn/cache/@types-fluent-ffmpeg-npm-2.1.16-50b0b85e70-be59b73093.zip/node_modules/@types/fluent-ffmpeg/",
+          "packageDependencies": [
+            ["@types/fluent-ffmpeg", "npm:2.1.16"],
+            ["@types/node", "npm:14.14.16"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/gl", [
         ["npm:4.1.0", {
           "packageLocation": "./.yarn/cache/@types-gl-npm-4.1.0-95424fae8d-17a815115b.zip/node_modules/@types/gl/",
@@ -188,16 +197,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         ["npm:14.14.16", {
           "packageLocation": "./.yarn/cache/@types-node-npm-14.14.16-b866b68544-220a7496ec.zip/node_modules/@types/node/",
           "packageDependencies": [
-            ["@types/node", "npm:14.14.16"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/omggif", [
-        ["npm:1.0.1", {
-          "packageLocation": "./.yarn/cache/@types-omggif-npm-1.0.1-bc91fb9028-6503756d33.zip/node_modules/@types/omggif/",
-          "packageDependencies": [
-            ["@types/omggif", "npm:1.0.1"],
             ["@types/node", "npm:14.14.16"]
           ],
           "linkType": "HARD",
@@ -574,6 +573,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/astral-regex-npm-2.0.0-f30d866aab-bf049ee704.zip/node_modules/astral-regex/",
           "packageDependencies": [
             ["astral-regex", "npm:2.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["async", [
+        ["npm:3.2.0", {
+          "packageLocation": "./.yarn/cache/async-npm-3.2.0-b6fd825ddc-5c7913c084.zip/node_modules/async/",
+          "packageDependencies": [
+            ["async", "npm:3.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -1485,6 +1493,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["fluent-ffmpeg", [
+        ["npm:2.1.2", {
+          "packageLocation": "./.yarn/cache/fluent-ffmpeg-npm-2.1.2-692c218f68-c86a0e4f9f.zip/node_modules/fluent-ffmpeg/",
+          "packageDependencies": [
+            ["fluent-ffmpeg", "npm:2.1.2"],
+            ["async", "npm:3.2.0"],
+            ["which", "npm:1.3.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["forever-agent", [
         ["npm:0.6.1", {
           "packageLocation": "./.yarn/cache/forever-agent-npm-0.6.1-01dae53bf9-9cc0054dd4.zip/node_modules/forever-agent/",
@@ -1596,19 +1615,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["gif-creator-bot", "workspace:."],
+            ["@types/fluent-ffmpeg", "npm:2.1.16"],
             ["@types/gl", "npm:4.1.0"],
             ["@types/node", "npm:14.14.16"],
-            ["@types/omggif", "npm:1.0.1"],
             ["@typescript-eslint/eslint-plugin", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["@typescript-eslint/parser", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["discord.js", "npm:12.5.1"],
             ["eslint", "npm:7.16.0"],
             ["eslint-plugin-import", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:2.22.1"],
             ["event-target-shim", "npm:5.0.1"],
+            ["fluent-ffmpeg", "npm:2.1.2"],
             ["gl", "npm:4.9.0"],
-            ["omggif", "npm:1.0.10"],
             ["three", "npm:0.124.0"],
-            ["three-software-renderer", "npm:1.2.0"],
             ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"]
           ],
           "linkType": "SOFT",
@@ -2483,15 +2501,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["omggif", [
-        ["npm:1.0.10", {
-          "packageLocation": "./.yarn/cache/omggif-npm-1.0.10-6ffa5bf343-a871594f9e.zip/node_modules/omggif/",
-          "packageDependencies": [
-            ["omggif", "npm:1.0.10"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["once", [
         ["npm:1.4.0", {
           "packageLocation": "./.yarn/cache/once-npm-1.4.0-ccf03ef07a-57afc24653.zip/node_modules/once/",
@@ -3353,23 +3362,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["three", "npm:0.124.0"]
           ],
           "linkType": "HARD",
-        }],
-        ["npm:0.82.1", {
-          "packageLocation": "./.yarn/cache/three-npm-0.82.1-5564a9b6d0-e18da098bb.zip/node_modules/three/",
-          "packageDependencies": [
-            ["three", "npm:0.82.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["three-software-renderer", [
-        ["npm:1.2.0", {
-          "packageLocation": "./.yarn/cache/three-software-renderer-npm-1.2.0-a170472eeb-02210d5d4d.zip/node_modules/three-software-renderer/",
-          "packageDependencies": [
-            ["three-software-renderer", "npm:1.2.0"],
-            ["three", "npm:0.82.1"]
-          ],
-          "linkType": "HARD",
         }]
       ]],
       ["through2", [
@@ -3578,6 +3570,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["which", [
+        ["npm:1.3.1", {
+          "packageLocation": "./.yarn/cache/which-npm-1.3.1-f0ebb8bdd8-298d95f9c1.zip/node_modules/which/",
+          "packageDependencies": [
+            ["which", "npm:1.3.1"],
+            ["isexe", "npm:2.0.0"]
+          ],
+          "linkType": "HARD",
+        }],
         ["npm:2.0.2", {
           "packageLocation": "./.yarn/cache/which-npm-2.0.2-320ddf72f7-ea9b1db126.zip/node_modules/which/",
           "packageDependencies": [
