@@ -25,11 +25,6 @@ export async function runRenderer(input: string): Promise<void> {
 
   cam.position.z = 300;
 
-  const box = new THREE.Mesh(
-    new THREE.BoxGeometry(30, 30, 30),
-    new THREE.MeshBasicMaterial({ color: 0xff0000 })
-  );
-
   const fontjson = await readFile('src/fonts/Roboto_Bold.json', 'utf-8');
   const font = new THREE.Font(JSON.parse(fontjson));
 
