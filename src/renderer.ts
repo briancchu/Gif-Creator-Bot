@@ -70,15 +70,30 @@ export async function runRenderer(input: string): Promise<void> {
 
     return lines;
   }
-  
+
+  // calculate the number of units covered by the viewport horizontally at the
+  // given distance from the camera
+  const viewportDistance = cam.position.length();
+  // horizontal FoV
+  const viewportFov = cam.fov * cam.aspect;
+  const viewportWidth = Math.tan(viewportFov / 2 * Math.PI / 180) * viewportDistance * 2;
+  // add 5% padding on each side
+  const maxWidth = viewportWidth * 0.9;
+
   const fontSize = 30;
 
-  const textLines = wrapText(input, fontSize, 245);
-  const textShapes = textLines.flatMap((line, index) => textToShapes(line, font, fontSize, { y: fontSize * index }));
+  const textLines = wrapText(input, fontSize, maxWidth);
 
-  // textWidth should not exceed 245 for fontsize 30 (depending on margins we want)
-  // with this size we can fit around 4 lines comfortably, dk what we want to do
-  // about that yet
+  const textShapes = textLines.flatMap((line, index) => {
+    const lineWidth = font.getAdvanceWidth(line, fontSize);
+    const lineShapes = textToShapes(line, font, fontSize, {
+      x: -lineWidth / 2,
+      y: fontSize * index,
+    });
+
+    return lineShapes;
+  });
+
   const textGeometry = new THREE.ExtrudeBufferGeometry(textShapes, {
     curveSegments: 12,
     bevelEnabled: false,
@@ -113,7 +128,7 @@ export async function runRenderer(input: string): Promise<void> {
   command.inputOption(`-video_size ${WIDTH}x${HEIGHT}`);
   command.outputOption('-c:v libx264');
   command.outputOption('-crf 10');
-  command.outputOption('-b:v 1M');
+  // command.outputOption('-b:v 1M');
   command.outputOption('-pix_fmt yuv420p');
   command.output('output.mp4');
 
