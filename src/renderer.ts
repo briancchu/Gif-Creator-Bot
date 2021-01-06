@@ -4,8 +4,18 @@ import * as THREE from 'three';
 import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
 import { promises } from 'fs';
-const { readFile } = promises;
+import { v4 as uuidv4 } from 'uuid';
+import { parse } from 'opentype.js';
+import { textToShapes } from './util/font';
 
+const { readFile, access, mkdir } = promises;
+
+/**
+ * Renders text into a video.
+ * @param input The text to render.
+ * @returns The ID of the video, which is also the name of the video file on the
+ * disk.
+ */
 export async function runRenderer(input: string): Promise<void> {
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
@@ -25,21 +35,81 @@ export async function runRenderer(input: string): Promise<void> {
 
   cam.position.z = 300;
 
-  const fontjson = await readFile('src/fonts/Roboto_Bold.json', 'utf-8');
-  const font = new THREE.Font(JSON.parse(fontjson));
+  const fontData = await readFile('src/fonts/Inter-Bold.ttf');
+  const font = parse(fontData.buffer);
 
-  const textGeometry = new THREE.TextGeometry(input, {
-    font: font,
-    size: 30,
-    height: 10,
+  // returns a string separated onto multiple lines based on max width
+  function wrapText(text: string, fontSize: number, maxWidth: number) {
+    const lines = [];
+
+    let currentLine = '';
+    let currentWord = '';
+
+    for (const character of text) {
+      if (character === '\n') {
+        lines.push(currentLine);
+        currentLine = '';
+        currentWord = '';
+        continue;
+      }
+
+      // if this character is whitespace, our word has ended,
+      // consider breaking the line
+      if (/\s/.test(character)) {
+        const futureLine = currentLine + currentWord;
+
+        // if adding the word to this line would fit, then add it, otherwise,
+        // add it to the current line and keep the whitespace
+        if (font.getAdvanceWidth(futureLine, fontSize) < maxWidth) {
+          currentLine = futureLine + character;
+        } else {
+          lines.push(currentLine);
+          currentLine = currentWord + character;
+        }
+
+        currentWord = '';
+      } else {
+        currentWord += character;
+      }
+    }
+
+    if (!/^\s*$/.test(currentWord)) currentLine += currentWord;
+    if (currentLine !== '') lines.push(currentLine);
+
+    return lines;
+  }
+
+  // calculate the number of units covered by the viewport horizontally at the
+  // given distance from the camera
+  const viewportDistance = cam.position.length();
+  // horizontal FoV
+  const viewportFov = cam.fov * cam.aspect;
+  const viewportWidth = Math.tan(viewportFov / 2 * Math.PI / 180) * viewportDistance * 2;
+  // add 5% padding on each side
+  const maxWidth = viewportWidth * 0.9;
+
+  const fontSize = 30;
+
+  const textLines = wrapText(input, fontSize, maxWidth);
+
+  const textShapes = textLines.flatMap((line, index) => {
+    const lineWidth = font.getAdvanceWidth(line, fontSize);
+    const lineShapes = textToShapes(line, font, fontSize, {
+      x: -lineWidth / 2,
+      y: fontSize * index,
+    });
+
+    return lineShapes;
+  });
+
+  const textGeometry = new THREE.ExtrudeBufferGeometry(textShapes, {
     curveSegments: 12,
     bevelEnabled: false,
+    depth: 10,
   });
 
   textGeometry.computeBoundingBox();
-  const textWidth = textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x;
-  const textHeight = textGeometry.boundingBox!.max.y - textGeometry.boundingBox!.min.y;
-  textGeometry.translate(-textWidth / 2, -textHeight / 2, 0);
+  textGeometry.center();
 
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.125);
   dirLight.position.set(0, 0, 1).normalize();
@@ -52,29 +122,37 @@ export async function runRenderer(input: string): Promise<void> {
   const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
   const mesh = new THREE.Mesh(textGeometry, material);
 
-  mesh.rotation.x = (Math.PI / 180) * 180;
-
   scene.add(mesh);
 
   // create a stream that will send the data we send to it into FFMpeg
-  const stream = new PassThrough({ objectMode: false });
+  const inputStream = new PassThrough({ objectMode: false });
+
+  // generate a UUID as the 'id' of this video
+  const id = uuidv4();
+
+  // if 'output' is not a directory, try to create a directory called 'output'
+  try {
+    await access('output');
+  } catch {
+    await mkdir('output');
+  }
 
   // create an FFMpeg command that will process the stream as a 'raw video' in
   // RGBA format and produce a WebM-encoded video
-  const command = ffmpeg(stream);
+  const command = ffmpeg(inputStream);
   command.inputFormat('rawvideo');
   command.inputOption('-pixel_format rgba');
   command.inputOption('-framerate 60');
   command.inputOption(`-video_size ${WIDTH}x${HEIGHT}`);
   command.outputOption('-c:v libx264');
   command.outputOption('-crf 10');
-  command.outputOption('-b:v 1M');
+  // command.outputOption('-b:v 1M');
   command.outputOption('-pix_fmt yuv420p');
-  command.output('output.mp4');
+  command.output(`output/${id}.mp4`);
 
   // return a Promise that resolves when FFMpeg exits
   return new Promise((resolve, reject) => {
-    command.on('end', () => resolve());
+    command.on('end', () => resolve(id));
     command.on('error', (err) => reject(err));
     command.run();
 
@@ -91,9 +169,9 @@ export async function runRenderer(input: string): Promise<void> {
       ctx.readPixels(0, 0, WIDTH, HEIGHT, ctx.RGBA, ctx.UNSIGNED_BYTE, pixels);
 
       // send the buffer to FFMpeg
-      stream.write(pixels);
+      inputStream.write(pixels);
     }
 
-    stream.end();
+    inputStream.end();
   });
 }
