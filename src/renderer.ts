@@ -30,35 +30,47 @@ export async function runRenderer(input: string): Promise<void> {
   const fontData = await readFile('src/fonts/Inter-Bold.ttf');
   const font = parse(fontData.buffer);
 
-
   // returns a string separated onto multiple lines based on max width
   function wrapText(text: string, fontSize: number, maxWidth: number) {
     const lines = [];
 
     let currentLine = '';
+    let currentWord = '';
 
     for (const character of text) {
       if (character === '\n') {
         lines.push(currentLine);
         currentLine = '';
+        currentWord = '';
         continue;
       }
 
-      const futureLine = currentLine + character;
+      // if this character is whitespace, our word has ended,
+      // consider breaking the line
+      if (/\s/.test(character)) {
+        const futureLine = currentLine + currentWord;
 
-      if (font.getAdvanceWidth(futureLine, fontSize) > maxWidth) {
-        lines.push(currentLine);
-        currentLine = character;
+        // if adding the word to this line would fit, then add it, otherwise,
+        // add it to the current line and keep the whitespace
+        if (font.getAdvanceWidth(futureLine, fontSize) < maxWidth) {
+          currentLine = futureLine + character;
+        } else {
+          lines.push(currentLine);
+          currentLine = currentWord + character;
+        }
+
+        currentWord = '';
       } else {
-        currentLine = futureLine;
+        currentWord += character;
       }
     }
 
+    if (!/^\s*$/.test(currentWord)) currentLine += currentWord;
     if (currentLine !== '') lines.push(currentLine);
 
     return lines;
   }
-
+  
   const fontSize = 30;
 
   const textLines = wrapText(input, fontSize, 245);
