@@ -16,7 +16,9 @@ const { readFile, access, mkdir } = promises;
  * @returns The ID of the video, which is also the name of the video file on the
  * disk.
  */
-export async function runRenderer(input: string): Promise<void> {
+export async function runRenderer(
+  input: string
+): Promise<string> {
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
 
