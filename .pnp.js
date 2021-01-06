@@ -40,7 +40,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fluent-ffmpeg", "npm:2.1.16"],
             ["@types/gl", "npm:4.1.0"],
             ["@types/node", "npm:14.14.16"],
+            ["@types/node-fetch", "npm:2.5.7"],
             ["@types/opentype.js", "npm:1.3.1"],
+            ["@types/uuid", "npm:8.3.0"],
             ["@typescript-eslint/eslint-plugin", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["@typescript-eslint/parser", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["discord.js", "npm:12.5.1"],
@@ -48,10 +50,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-import", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:2.22.1"],
             ["event-target-shim", "npm:5.0.1"],
             ["fluent-ffmpeg", "npm:2.1.2"],
+            ["form-data", "npm:3.0.0"],
             ["gl", "npm:4.9.0"],
+            ["node-fetch", "npm:2.6.1"],
             ["opentype.js", "npm:1.3.3"],
             ["three", "npm:0.124.0"],
-            ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"]
+            ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"],
+            ["uuid", "npm:8.3.2"]
           ],
           "linkType": "SOFT",
         }]
@@ -204,11 +209,31 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/node-fetch", [
+        ["npm:2.5.7", {
+          "packageLocation": "./.yarn/cache/@types-node-fetch-npm-2.5.7-fd8c51e56f-101f6e8474.zip/node_modules/@types/node-fetch/",
+          "packageDependencies": [
+            ["@types/node-fetch", "npm:2.5.7"],
+            ["@types/node", "npm:14.14.16"],
+            ["form-data", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/opentype.js", [
         ["npm:1.3.1", {
           "packageLocation": "./.yarn/cache/@types-opentype.js-npm-1.3.1-c77156fb16-261762e2fd.zip/node_modules/@types/opentype.js/",
           "packageDependencies": [
             ["@types/opentype.js", "npm:1.3.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/uuid", [
+        ["npm:8.3.0", {
+          "packageLocation": "./.yarn/cache/@types-uuid-npm-8.3.0-60b441a3d7-620985aed8.zip/node_modules/@types/uuid/",
+          "packageDependencies": [
+            ["@types/uuid", "npm:8.3.0"]
           ],
           "linkType": "HARD",
         }]
@@ -1534,6 +1559,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mime-types", "npm:2.1.27"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:3.0.0", {
+          "packageLocation": "./.yarn/cache/form-data-npm-3.0.0-b01f488350-1af88217b4.zip/node_modules/form-data/",
+          "packageDependencies": [
+            ["form-data", "npm:3.0.0"],
+            ["asynckit", "npm:0.4.0"],
+            ["combined-stream", "npm:1.0.8"],
+            ["mime-types", "npm:2.1.27"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["fs-constants", [
@@ -1629,7 +1664,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fluent-ffmpeg", "npm:2.1.16"],
             ["@types/gl", "npm:4.1.0"],
             ["@types/node", "npm:14.14.16"],
+            ["@types/node-fetch", "npm:2.5.7"],
             ["@types/opentype.js", "npm:1.3.1"],
+            ["@types/uuid", "npm:8.3.0"],
             ["@typescript-eslint/eslint-plugin", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["@typescript-eslint/parser", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["discord.js", "npm:12.5.1"],
@@ -1637,10 +1674,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-import", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:2.22.1"],
             ["event-target-shim", "npm:5.0.1"],
             ["fluent-ffmpeg", "npm:2.1.2"],
+            ["form-data", "npm:3.0.0"],
             ["gl", "npm:4.9.0"],
+            ["node-fetch", "npm:2.6.1"],
             ["opentype.js", "npm:1.3.3"],
             ["three", "npm:0.124.0"],
-            ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"]
+            ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"],
+            ["uuid", "npm:8.3.2"]
           ],
           "linkType": "SOFT",
         }]
@@ -3575,6 +3615,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/uuid-npm-3.4.0-4fd8ef88ad-1ce3f37e21.zip/node_modules/uuid/",
           "packageDependencies": [
             ["uuid", "npm:3.4.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:8.3.2", {
+          "packageLocation": "./.yarn/cache/uuid-npm-8.3.2-eca0baba53-aed2bcef34.zip/node_modules/uuid/",
+          "packageDependencies": [
+            ["uuid", "npm:8.3.2"]
           ],
           "linkType": "HARD",
         }]

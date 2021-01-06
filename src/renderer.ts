@@ -4,10 +4,18 @@ import * as THREE from 'three';
 import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
 import { promises } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 import { parse } from 'opentype.js';
 import { textToShapes } from './util/font';
-const { readFile } = promises;
 
+const { readFile, access, mkdir } = promises;
+
+/**
+ * Renders text into a video.
+ * @param input The text to render.
+ * @returns The ID of the video, which is also the name of the video file on the
+ * disk.
+ */
 export async function runRenderer(input: string): Promise<void> {
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
@@ -117,11 +125,21 @@ export async function runRenderer(input: string): Promise<void> {
   scene.add(mesh);
 
   // create a stream that will send the data we send to it into FFMpeg
-  const stream = new PassThrough({ objectMode: false });
+  const inputStream = new PassThrough({ objectMode: false });
+
+  // generate a UUID as the 'id' of this video
+  const id = uuidv4();
+
+  // if 'output' is not a directory, try to create a directory called 'output'
+  try {
+    await access('output');
+  } catch {
+    await mkdir('output');
+  }
 
   // create an FFMpeg command that will process the stream as a 'raw video' in
   // RGBA format and produce a WebM-encoded video
-  const command = ffmpeg(stream);
+  const command = ffmpeg(inputStream);
   command.inputFormat('rawvideo');
   command.inputOption('-pixel_format rgba');
   command.inputOption('-framerate 60');
@@ -130,11 +148,11 @@ export async function runRenderer(input: string): Promise<void> {
   command.outputOption('-crf 10');
   // command.outputOption('-b:v 1M');
   command.outputOption('-pix_fmt yuv420p');
-  command.output('output.mp4');
+  command.output(`output/${id}.mp4`);
 
   // return a Promise that resolves when FFMpeg exits
   return new Promise((resolve, reject) => {
-    command.on('end', () => resolve());
+    command.on('end', () => resolve(id));
     command.on('error', (err) => reject(err));
     command.run();
 
@@ -151,9 +169,9 @@ export async function runRenderer(input: string): Promise<void> {
       ctx.readPixels(0, 0, WIDTH, HEIGHT, ctx.RGBA, ctx.UNSIGNED_BYTE, pixels);
 
       // send the buffer to FFMpeg
-      stream.write(pixels);
+      inputStream.write(pixels);
     }
 
-    stream.end();
+    inputStream.end();
   });
 }

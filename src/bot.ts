@@ -1,30 +1,23 @@
 import { Client, MessageAttachment } from 'discord.js';
 import { runRenderer } from './renderer';
-import { promises } from 'fs';
+import { promises, createReadStream } from 'fs';
+import { uploadToImgur } from './util/imgur';
 const { readFile } = promises;
 
 export async function runBot() {
   const client = new Client();
 
+  const imgurClientId = process.env['IMGUR_CLIENT_ID'];
+  const discordToken = process.env['DISCORD_TOKEN'];
+
+  if (!imgurClientId)
+    throw new Error('Imgur client ID needs to be provided in IMGUR_CLIENT_ID environment variable.');
+
+  if (!discordToken)
+    throw new Error('Discord token needs to be provided in DISCORD_TOKEN environemtn variable.');
+
   client.on('ready', () => {
     console.log(`Logged in as ${client.user!.tag}!`);
-  });
-
-  client.on('message', msg => {
-    if (msg.content === 'ping') {
-
-    }
-  });
-
-  client.on('message', async message => {
-    // If the message is '!rip'
-
-    if (message.content === '!rip') {
-      // Create the attachment using MessageAttachment
-      const attachment = new MessageAttachment('https://i.imgur.com/w3duR07.png');
-      // Send the attachment in the message channel
-      await message.channel.send(attachment);
-    }
   });
 
   // Generate text gif from user input
@@ -32,15 +25,44 @@ export async function runBot() {
     const rawInput = message.content;
     const fchar = rawInput.charAt(0);
     const input = message.content.substr(1);
+
     if (fchar === '*') {
-      // Create gif with file name 'output.mp4' using input
-      await runRenderer(input);
+      // Create gif using input
+      const id = await runRenderer(input);
+
       // Get the buffer from the file name, assuming that the file exists
-      const buffer = await readFile('output.mp4');
-      const attachment = new MessageAttachment(buffer, 'output.mp4');
-      message.channel.send(attachment);
+      const stream = createReadStream(`output/${id}.mp4`);
+
+      try {
+        const response = await uploadToImgur(imgurClientId, stream);
+
+        if (!response.success)
+          throw new Error('imgur upload failed:\n' + JSON.stringify(response));
+
+        const imgurId = response.data.id;
+
+        if (!imgurId)
+          throw new Error('imgur response does not contain image id');
+
+        // if our video is still pending when Imgur responds, wait a few
+        // seconds before uploading to Discord to avoid glitches
+        if (response.data.type === 'video/mp4') {
+          if (response.data.processing.status === 'pending') {
+            await new Promise(res => setTimeout(res, 2000));
+          }
+        }
+
+        await message.channel.send(`https://imgur.com/${imgurId}`);
+      } catch (error) {
+        await message.channel.send(
+          'Sorry, we couldn\'t upload the animation to Imgur. Here\'s the file, though.',
+          new MessageAttachment(stream)
+        );
+
+        console.warn('error uploading animation to imgur', error);
+      }
     }
   });
 
-  await client.login('NzkzMTU5NTgwODEyMDUwNDQy.X-oNbA.WANA_OqGxkw266IyFNRXyiG55cg');
+  await client.login(discordToken);
 }
