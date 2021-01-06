@@ -132,6 +132,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/opentype.js@npm:^1":
+  version: 1.3.1
+  resolution: "@types/opentype.js@npm:1.3.1"
+  checksum: 261762e2fd9be557d7f0875115d32dde932bc9357dd68b0da3ced9717e267abe7433280eb978ba1cf110857ce31f575616ac63f3c4c5b23c928d5bb79936e971
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/eslint-plugin@npm:^4.11.0":
   version: 4.11.0
   resolution: "@typescript-eslint/eslint-plugin@npm:4.11.0"
@@ -1296,6 +1303,7 @@ __metadata:
     "@types/fluent-ffmpeg": ^2.1.16
     "@types/gl": ^4.1.0
     "@types/node": ^14.14.16
+    "@types/opentype.js": ^1
     "@typescript-eslint/eslint-plugin": ^4.11.0
     "@typescript-eslint/parser": ^4.11.0
     discord.js: ^12.5.1
@@ -1304,6 +1312,7 @@ __metadata:
     event-target-shim: ^5.0.1
     fluent-ffmpeg: ^2.1.2
     gl: ^4.9.0
+    opentype.js: ^1.3.3
     three: ^0.124.0
     typescript: ^4.1.3
   languageName: unknown
@@ -2069,6 +2078,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"opentype.js@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "opentype.js@npm:1.3.3"
+  dependencies:
+    string.prototype.codepointat: ^0.2.1
+    tiny-inflate: ^1.0.3
+  bin:
+    ot: bin/ot
+  checksum: cf5d975ae64bb16d718c7920bd78793c52189981b35c22db676e465f8d14615c92c1b8b3ecfa62be3de86a124da5b0e8178ed5aaa5afcd5e4022c5536bb71cf8
+  languageName: node
+  linkType: hard
+
 "optionator@npm:^0.9.1":
   version: 0.9.1
   resolution: "optionator@npm:0.9.1"
@@ -2666,6 +2687,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"string.prototype.codepointat@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "string.prototype.codepointat@npm:0.2.1"
+  checksum: 2621f45bdb78d969fd5754bac5aa0686776e894556cba734e11ca6b032869e39b0762a284fca5cdf04ef3d6cca9cb0fb0676fed09dba8518569aae5a353df66e
+  languageName: node
+  linkType: hard
+
 "string.prototype.trimend@npm:^1.0.1":
   version: 1.0.3
   resolution: "string.prototype.trimend@npm:1.0.3"
@@ -2849,6 +2877,13 @@ __metadata:
     readable-stream: ">=1.0.33-1 <1.1.0-0"
     xtend: ">=4.0.0 <4.1.0-0"
   checksum: 490ee7571a49e91fb76506eacfb5e1edb9900db7c97d0c6532a077a91ab97987d392d093b40600dec16ef36530d7eb919f32b209d3b70d9976ca7cc8076f4384
+  languageName: node
+  linkType: hard
+
+"tiny-inflate@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "tiny-inflate@npm:1.0.3"
+  checksum: 9088a9c59af15fb6f16dcdaadd6d20a5fc539cc123fb847beb2ccb6e63765d87bdebbcf12eb9e7aa4abeec4dc2b5b8c74da33702330fb38647ebf497915f3731
   languageName: node
   linkType: hard
 

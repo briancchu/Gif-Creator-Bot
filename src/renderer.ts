@@ -4,6 +4,8 @@ import * as THREE from 'three';
 import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
 import { promises } from 'fs';
+import { parse } from 'opentype.js';
+import { textToShapes } from './util/font';
 const { readFile } = promises;
 
 export async function runRenderer(input: string): Promise<void> {
@@ -25,21 +27,54 @@ export async function runRenderer(input: string): Promise<void> {
 
   cam.position.z = 300;
 
-  const fontjson = await readFile('src/fonts/Roboto_Bold.json', 'utf-8');
-  const font = new THREE.Font(JSON.parse(fontjson));
+  const fontData = await readFile('src/fonts/Inter-Bold.ttf');
+  const font = parse(fontData.buffer);
 
-  const textGeometry = new THREE.TextGeometry(input, {
-    font: font,
-    size: 30,
-    height: 10,
+
+  // returns a string separated onto multiple lines based on max width
+  function wrapText(text: string, fontSize: number, maxWidth: number) {
+    const lines = [];
+
+    let currentLine = '';
+
+    for (const character of text) {
+      if (character === '\n') {
+        lines.push(currentLine);
+        currentLine = '';
+        continue;
+      }
+
+      const futureLine = currentLine + character;
+
+      if (font.getAdvanceWidth(futureLine, fontSize) > maxWidth) {
+        lines.push(currentLine);
+        currentLine = character;
+      } else {
+        currentLine = futureLine;
+      }
+    }
+
+    if (currentLine !== '') lines.push(currentLine);
+
+    return lines;
+  }
+
+  const fontSize = 30;
+
+  const textLines = wrapText(input, fontSize, 245);
+  const textShapes = textLines.flatMap((line, index) => textToShapes(line, font, fontSize, { y: fontSize * index }));
+
+  // textWidth should not exceed 245 for fontsize 30 (depending on margins we want)
+  // with this size we can fit around 4 lines comfortably, dk what we want to do
+  // about that yet
+  const textGeometry = new THREE.ExtrudeBufferGeometry(textShapes, {
     curveSegments: 12,
     bevelEnabled: false,
+    depth: 10,
   });
 
   textGeometry.computeBoundingBox();
-  const textWidth = textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x;
-  const textHeight = textGeometry.boundingBox!.max.y - textGeometry.boundingBox!.min.y;
-  textGeometry.translate(-textWidth / 2, -textHeight / 2, 0);
+  textGeometry.center();
 
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.125);
   dirLight.position.set(0, 0, 1).normalize();
@@ -51,8 +86,6 @@ export async function runRenderer(input: string): Promise<void> {
 
   const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
   const mesh = new THREE.Mesh(textGeometry, material);
-
-  mesh.rotation.x = (Math.PI / 180) * 180;
 
   scene.add(mesh);
 

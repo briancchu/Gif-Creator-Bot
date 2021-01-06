@@ -40,6 +40,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fluent-ffmpeg", "npm:2.1.16"],
             ["@types/gl", "npm:4.1.0"],
             ["@types/node", "npm:14.14.16"],
+            ["@types/opentype.js", "npm:1.3.1"],
             ["@typescript-eslint/eslint-plugin", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["@typescript-eslint/parser", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["discord.js", "npm:12.5.1"],
@@ -48,6 +49,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["event-target-shim", "npm:5.0.1"],
             ["fluent-ffmpeg", "npm:2.1.2"],
             ["gl", "npm:4.9.0"],
+            ["opentype.js", "npm:1.3.3"],
             ["three", "npm:0.124.0"],
             ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"]
           ],
@@ -198,6 +200,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-14.14.16-b866b68544-220a7496ec.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:14.14.16"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/opentype.js", [
+        ["npm:1.3.1", {
+          "packageLocation": "./.yarn/cache/@types-opentype.js-npm-1.3.1-c77156fb16-261762e2fd.zip/node_modules/@types/opentype.js/",
+          "packageDependencies": [
+            ["@types/opentype.js", "npm:1.3.1"]
           ],
           "linkType": "HARD",
         }]
@@ -1618,6 +1629,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fluent-ffmpeg", "npm:2.1.16"],
             ["@types/gl", "npm:4.1.0"],
             ["@types/node", "npm:14.14.16"],
+            ["@types/opentype.js", "npm:1.3.1"],
             ["@typescript-eslint/eslint-plugin", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["@typescript-eslint/parser", "virtual:4317106741681305067182e402eb9c6b090e62a03279b6b901181991974595e389b458d100fe8b8683a75989d3948822c60505bfd2094e706c35b58f2cd58d1d#npm:4.11.0"],
             ["discord.js", "npm:12.5.1"],
@@ -1626,6 +1638,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["event-target-shim", "npm:5.0.1"],
             ["fluent-ffmpeg", "npm:2.1.2"],
             ["gl", "npm:4.9.0"],
+            ["opentype.js", "npm:1.3.3"],
             ["three", "npm:0.124.0"],
             ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"]
           ],
@@ -2511,6 +2524,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["opentype.js", [
+        ["npm:1.3.3", {
+          "packageLocation": "./.yarn/cache/opentype.js-npm-1.3.3-3fdc40fb0a-cf5d975ae6.zip/node_modules/opentype.js/",
+          "packageDependencies": [
+            ["opentype.js", "npm:1.3.3"],
+            ["string.prototype.codepointat", "npm:0.2.1"],
+            ["tiny-inflate", "npm:1.0.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["optionator", [
         ["npm:0.9.1", {
           "packageLocation": "./.yarn/cache/optionator-npm-0.9.1-577e397aae-bdf5683f98.zip/node_modules/optionator/",
@@ -3175,6 +3199,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["string.prototype.codepointat", [
+        ["npm:0.2.1", {
+          "packageLocation": "./.yarn/cache/string.prototype.codepointat-npm-0.2.1-82003deaf5-2621f45bdb.zip/node_modules/string.prototype.codepointat/",
+          "packageDependencies": [
+            ["string.prototype.codepointat", "npm:0.2.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["string.prototype.trimend", [
         ["npm:1.0.3", {
           "packageLocation": "./.yarn/cache/string.prototype.trimend-npm-1.0.3-c0c24507b7-0dd169f2e1.zip/node_modules/string.prototype.trimend/",
@@ -3371,6 +3404,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["through2", "npm:0.6.5"],
             ["readable-stream", "npm:1.0.34"],
             ["xtend", "npm:4.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["tiny-inflate", [
+        ["npm:1.0.3", {
+          "packageLocation": "./.yarn/cache/tiny-inflate-npm-1.0.3-a7419a5c65-9088a9c59a.zip/node_modules/tiny-inflate/",
+          "packageDependencies": [
+            ["tiny-inflate", "npm:1.0.3"]
           ],
           "linkType": "HARD",
         }]
