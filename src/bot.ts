@@ -1,8 +1,7 @@
 import { Client, MessageAttachment } from 'discord.js';
 import { runRenderer } from './renderer';
-import { promises, createReadStream } from 'fs';
-import { uploadToImgur } from './util/imgur';
-const { readFile } = promises;
+import { createReadStream } from 'fs';
+import { getImageInfo, uploadToImgur } from './util/imgur';
 
 export async function runBot() {
   const client = new Client();
@@ -27,37 +26,52 @@ export async function runBot() {
     const input = message.content.substr(1);
 
     if (fchar === '*') {
+      const reply = await message.channel.send('rendering your gif');
+
       // Create gif using input
       const id = await runRenderer(input);
 
       // Get the buffer from the file name, assuming that the file exists
       const stream = createReadStream(`output/${id}.mp4`);
 
+      const emojis = '⏳⌛';
+      let emojiIdx = 0;
+
       try {
-        const response = await uploadToImgur(imgurClientId, stream);
+        await reply.edit(`uploading your gif to imgur ${emojis[emojiIdx]}`);
+        emojiIdx = (emojiIdx + 1) % emojis.length;
 
-        if (!response.success)
-          throw new Error('imgur upload failed:\n' + JSON.stringify(response));
+        let imgurResponse = await uploadToImgur(imgurClientId, stream);
 
-        const imgurId = response.data.id;
+        if (!imgurResponse.success)
+          throw new Error('imgur upload failed:\n' + JSON.stringify(imgurResponse));
+
+        const imgurId = imgurResponse.data.id;
 
         if (!imgurId)
           throw new Error('imgur response does not contain image id');
 
         // if our video is still pending when Imgur responds, wait a few
         // seconds before uploading to Discord to avoid glitches
-        if (response.data.type === 'video/mp4') {
-          if (response.data.processing.status === 'pending') {
-            await new Promise(res => setTimeout(res, 2000));
-          }
+        while (
+          imgurResponse.data.type === 'video/mp4'
+          && imgurResponse.data.processing.status === 'pending'
+        ) {
+          await new Promise(res => setTimeout(res, 1000));
+          imgurResponse = await getImageInfo(imgurClientId, imgurResponse.data.id);
+
+          void reply.edit(`uploading your gif to imgur ${emojis[emojiIdx]}`);
+          emojiIdx = (emojiIdx + 1) % emojis.length;
         }
 
-        await message.channel.send(`https://imgur.com/${imgurId}`);
+        await new Promise(res => setTimeout(res, 1000));
+
+        await reply.edit(`https://imgur.com/${imgurId}`);
       } catch (error) {
-        await message.channel.send(
-          'Sorry, we couldn\'t upload the animation to Imgur. Here\'s the file, though.',
-          new MessageAttachment(stream)
+        await reply.edit(
+          'sorry, we couldn\'t upload the animation to imgur. here\'s the file, though.'
         );
+        await reply.channel.send(new MessageAttachment(createReadStream(`output/${id}.mp4`)));
 
         console.warn('error uploading animation to imgur', error);
       }

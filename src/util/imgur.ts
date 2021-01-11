@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import FormData from 'form-data';
 import { ReadStream } from 'fs';
 
-interface ImgurUploadResponse {
+interface ImgurImageResponse {
   status: number,
   success: boolean,
   data: ImgurImageInfo
@@ -59,7 +59,7 @@ type ImgurImageInfo = ImgurMp4ImageInfo | ImgurGifImageInfo;
 export async function uploadToImgur(
   clientId: string,
   imageData: Buffer | ReadStream
-): Promise<ImgurUploadResponse> {
+): Promise<ImgurImageResponse> {
   const formData = new FormData();
   formData.append('video', imageData);
 
@@ -71,6 +71,25 @@ export async function uploadToImgur(
     body: formData,
     redirect: 'follow',
   });
+
+  return response.json();
+}
+
+
+export async function getImageInfo(
+  clientId: string,
+  imgurImageId: string
+): Promise<ImgurImageResponse> {
+  const response = await fetch(
+    'https://api.imgur.com/3/image/' + imgurImageId, 
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Client-ID ${clientId}`,
+      },
+      redirect: 'follow',
+    }
+  );
 
   return response.json();
 }
