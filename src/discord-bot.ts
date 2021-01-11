@@ -4,7 +4,7 @@ import { createReadStream } from 'fs';
 import { getImageInfo, uploadToImgur } from './util/imgur';
 import { parseOptions } from './util/options';
 
-export async function runDiscordBot() {
+export async function runDiscordBot(): Promise<void> {
   const client = new Client();
 
   const imgurClientId = process.env['IMGUR_CLIENT_ID'];

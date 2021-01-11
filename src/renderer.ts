@@ -49,7 +49,7 @@ export async function runRenderer(
 
   cam.position.z = 300;
 
-  const fontData = await readFile('src/fonts/Inter-Bold.ttf');
+  const fontData = await readFile('src/fonts/BalsamiqSans-Regular.ttf');
   const font = parse(fontData.buffer);
 
   // returns a string separated onto multiple lines based on max width

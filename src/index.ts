@@ -9,4 +9,3 @@ runTelegramBot()
   .then(() => console.info('telegram bot launched'))
   .catch(error => console.error('error while running bot', error));
 
-
