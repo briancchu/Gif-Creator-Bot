@@ -17,7 +17,7 @@ const { readFile, access, mkdir } = promises;
  * disk.
  */
 export async function runRenderer(
-  input: string
+  input: string, fgColor: string, bgColor: string
 ): Promise<string> {
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
@@ -121,7 +121,13 @@ export async function runRenderer(
   pointLight.position.set(0, 100, 90);
   scene.add(pointLight);
 
-  const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+  const ambLight = new THREE.AmbientLight(bgColor);
+  scene.add(ambLight);
+
+
+  renderer.setClearColor(bgColor, 1);
+
+  const material = new THREE.MeshPhongMaterial({ color: fgColor });
   const mesh = new THREE.Mesh(textGeometry, material);
 
   scene.add(mesh);
@@ -160,7 +166,6 @@ export async function runRenderer(
 
     for (let frame = 0; frame < NUM_FRAMES; frame++) {
       mesh.rotation.y += Math.PI / 100;
-      mesh.material.color.offsetHSL(0.01, 0, 0);
 
       renderer.render(scene, cam); // render a frame in memory
 
