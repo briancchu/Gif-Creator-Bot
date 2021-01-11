@@ -54,6 +54,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["gl", "npm:4.9.0"],
             ["node-fetch", "npm:2.6.1"],
             ["opentype.js", "npm:1.3.3"],
+            ["telegraf", "npm:3.38.0"],
             ["three", "npm:0.124.0"],
             ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"],
             ["uuid", "npm:8.3.2"]
@@ -1678,6 +1679,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["gl", "npm:4.9.0"],
             ["node-fetch", "npm:2.6.1"],
             ["opentype.js", "npm:1.3.3"],
+            ["telegraf", "npm:3.38.0"],
             ["three", "npm:0.124.0"],
             ["typescript", "patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"],
             ["uuid", "npm:8.3.2"]
@@ -2352,6 +2354,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/mkdirp-classic-npm-0.5.3-3b5c991910-b3c46c6284.zip/node_modules/mkdirp-classic/",
           "packageDependencies": [
             ["mkdirp-classic", "npm:0.5.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["module-alias", [
+        ["npm:2.2.2", {
+          "packageLocation": "./.yarn/cache/module-alias-npm-2.2.2-576bd37c03-1b37943df4.zip/node_modules/module-alias/",
+          "packageDependencies": [
+            ["module-alias", "npm:2.2.2"]
           ],
           "linkType": "HARD",
         }]
@@ -3036,6 +3047,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["sandwich-stream", [
+        ["npm:2.0.2", {
+          "packageLocation": "./.yarn/cache/sandwich-stream-npm-2.0.2-76bdc6c560-f88483282e.zip/node_modules/sandwich-stream/",
+          "packageDependencies": [
+            ["sandwich-stream", "npm:2.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["semver", [
         ["npm:5.7.1", {
           "packageLocation": "./.yarn/cache/semver-npm-5.7.1-40bcea106b-06ff0ed753.zip/node_modules/semver/",
@@ -3415,6 +3435,30 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fs-constants", "npm:1.0.0"],
             ["inherits", "npm:2.0.4"],
             ["readable-stream", "npm:3.6.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["telegraf", [
+        ["npm:3.38.0", {
+          "packageLocation": "./.yarn/cache/telegraf-npm-3.38.0-9b2f9198e3-468e16ba31.zip/node_modules/telegraf/",
+          "packageDependencies": [
+            ["telegraf", "npm:3.38.0"],
+            ["debug", "virtual:88c91e718f5c047e706657833016435d9afd204207e38d93790ef921db10dcd422cdb8ab7a565d263b03ce9d79a2098e157c646f2bd38df6ecdb41f52893df49#npm:4.3.2"],
+            ["minimist", "npm:1.2.5"],
+            ["module-alias", "npm:2.2.2"],
+            ["node-fetch", "npm:2.6.1"],
+            ["sandwich-stream", "npm:2.0.2"],
+            ["telegram-typings", "npm:3.6.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["telegram-typings", [
+        ["npm:3.6.1", {
+          "packageLocation": "./.yarn/cache/telegram-typings-npm-3.6.1-141417fc65-a2aa1190f8.zip/node_modules/telegram-typings/",
+          "packageDependencies": [
+            ["telegram-typings", "npm:3.6.1"]
           ],
           "linkType": "HARD",
         }]

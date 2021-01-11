@@ -1345,6 +1345,7 @@ __metadata:
     gl: ^4.9.0
     node-fetch: ^2.6.1
     opentype.js: ^1.3.3
+    telegraf: ^3.38.0
     three: ^0.124.0
     typescript: ^4.1.3
     uuid: ^8.3.2
@@ -1928,6 +1929,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"module-alias@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "module-alias@npm:2.2.2"
+  checksum: 1b37943df4fbe56799688eb3496f5113f7f1e18ff7a53bd3543e93fd4ee6c4b04e1548fc0cb49ae73e086b18ee712ab3321f6d7f5444cf413c638914decb8918
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0"
@@ -1974,7 +1982,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.1":
+"node-fetch@npm:^2.2.0, node-fetch@npm:^2.6.1":
   version: 2.6.1
   resolution: "node-fetch@npm:2.6.1"
   checksum: cbb171635e538162b977eac5dfe7a1e07a9a02e991924377a6435502291e2f823d306b95aabc455caebf4a118ccf836868462bc70ccc3095af02bb9da61fda37
@@ -2533,6 +2541,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sandwich-stream@npm:^2.0.1":
+  version: 2.0.2
+  resolution: "sandwich-stream@npm:2.0.2"
+  checksum: f88483282e71e6d887119d8726fdaee56914fcab9df99d4777de650188fb823df314237eb6d2938b3e93d04054a047e2f774c8667014e8f4582b086d0c060ce9
+  languageName: node
+  linkType: hard
+
 "semver@npm:2 || 3 || 4 || 5, semver@npm:^5.4.1":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
@@ -2886,6 +2901,29 @@ __metadata:
     mkdirp: ^1.0.3
     yallist: ^4.0.0
   checksum: 7ae26210927bdf590686db21e66d5579020ccbebda93a1adffe266eb88ca8b152c56dd8ce0df87d81e3dbe709bfe8562b29c584871ba015ec868dec9062e91ea
+  languageName: node
+  linkType: hard
+
+"telegraf@npm:^3.38.0":
+  version: 3.38.0
+  resolution: "telegraf@npm:3.38.0"
+  dependencies:
+    debug: ^4.0.1
+    minimist: ^1.2.0
+    module-alias: ^2.2.2
+    node-fetch: ^2.2.0
+    sandwich-stream: ^2.0.1
+    telegram-typings: ^3.6.0
+  bin:
+    telegraf: ./bin/telegraf
+  checksum: 468e16ba3124b333363ce6019d64a35c1c75caa777df8b2466e018089bbcd2926888ef87abdf232bdd1c15d14b9e568259fdf1749fdff8cf4a9ed22cae707082
+  languageName: node
+  linkType: hard
+
+"telegram-typings@npm:^3.6.0":
+  version: 3.6.1
+  resolution: "telegram-typings@npm:3.6.1"
+  checksum: a2aa1190f826e45228a3b08c7d51718abd7c374b8ad0f79f5ebc6bd0fe4e0da7f8e7f1432b52e351df89d31d6d7384a71636c98432b5458b36b8f3fa0ea76721
   languageName: node
   linkType: hard
 

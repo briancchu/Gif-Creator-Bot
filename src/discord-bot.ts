@@ -3,7 +3,7 @@ import { runRenderer } from './renderer';
 import { createReadStream } from 'fs';
 import { getImageInfo, uploadToImgur } from './util/imgur';
 
-export async function runBot() {
+export async function runDiscordBot() {
   const client = new Client();
 
   const imgurClientId = process.env['IMGUR_CLIENT_ID'];
@@ -13,7 +13,7 @@ export async function runBot() {
     throw new Error('Imgur client ID needs to be provided in IMGUR_CLIENT_ID environment variable.');
 
   if (!discordToken)
-    throw new Error('Discord token needs to be provided in DISCORD_BOT_TOKEN environemtn variable.');
+    throw new Error('Discord token needs to be provided in DISCORD_BOT_TOKEN environment variable.');
 
   client.on('ready', () => {
     console.log(`Logged in as ${client.user!.tag}!`);
