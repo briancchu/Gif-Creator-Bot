@@ -10,6 +10,11 @@ import { textToShapes } from './util/font';
 
 const { readFile, access, mkdir } = promises;
 
+interface RendererOptions {
+  foreground?: string;
+  background?: string;
+}
+
 /**
  * Renders text into a video.
  * @param input The text to render.
@@ -17,8 +22,15 @@ const { readFile, access, mkdir } = promises;
  * disk.
  */
 export async function runRenderer(
-  input: string, fgColor: string, bgColor: string
+  input: string, options?: RendererOptions
 ): Promise<string> {
+  // put in the default options wherever they are not overriden by user-supplied
+  // options
+  const { foreground, background } = Object.assign({
+    foreground: 'white',
+    background: 'black',
+  }, options ?? { });
+
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
 
@@ -121,13 +133,12 @@ export async function runRenderer(
   pointLight.position.set(0, 100, 90);
   scene.add(pointLight);
 
-  const ambLight = new THREE.AmbientLight(bgColor);
+  const ambLight = new THREE.AmbientLight(background);
   scene.add(ambLight);
 
+  renderer.setClearColor(background, 1);
 
-  renderer.setClearColor(bgColor, 1);
-
-  const material = new THREE.MeshPhongMaterial({ color: fgColor });
+  const material = new THREE.MeshPhongMaterial({ color: foreground });
   const mesh = new THREE.Mesh(textGeometry, material);
 
   scene.add(mesh);
