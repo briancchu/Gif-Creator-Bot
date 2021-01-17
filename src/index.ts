@@ -12,8 +12,6 @@ async function main() {
   console.info('running discord and telegram clients');
 
   await Promise.all([runDiscordBot(), runTelegramBot()]);
-
-  console.warn('gif creator bot is exiting');
 }
 
 main().catch(console.error);
