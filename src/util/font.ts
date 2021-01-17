@@ -20,28 +20,32 @@ export function textToShapes(text: string, font: Font, size: number, options?: S
   // translate each SVG-style path command into Three.js
   for (const command of path.commands) {
     switch (command.type) {
-      case 'M': shape.moveTo(command.x, command.y); break;
-      case 'L': shape.lineTo(command.x, command.y); break;
-      case 'C': shape.bezierCurveTo(
-        command.x1, command.y1, command.x2, command.y2, command.x, command.y
-      ); break;
-      case 'Q': shape.quadraticCurveTo(
-        command.x1, command.y1, command.x, command.y
-      ); break;
-      case 'Z': shape.currentPath.closePath(); break;
+    case 'M': shape.moveTo(command.x, command.y); break;
+    case 'L': shape.lineTo(command.x, command.y); break;
+    case 'C': shape.bezierCurveTo(
+      command.x1, command.y1, command.x2, command.y2, command.x, command.y
+    ); break;
+    case 'Q': shape.quadraticCurveTo(
+      command.x1, command.y1, command.x, command.y
+    ); break;
+    case 'Z': shape.currentPath.closePath(); break;
     }
   }
 
   return shape.toShapes(true);
 }
 
+/**
+ * A map of maps of maps. Maps names -> font families -> font weights -> font
+ * styles -> fonts.
+ */
 export const fontMap = new Map();
 
 /**
  * Loads all of the fonts in the `src/fonts` folder and returns a mapping from
  * font family name to font object.
  */
-export async function loadFonts(): Promise<void> {
+export async function loadLocalFonts(): Promise<void> {
   const fontDirectory = 'src/fonts';
 
   for (const fontFilename of await readdir(fontDirectory)) {
@@ -55,6 +59,31 @@ export async function loadFonts(): Promise<void> {
 
     const font = parse(fontBuffer.buffer);
 
-    fontMap.set(font.names.fontFamily['en'].toLowerCase().replace(' ', ''), font);
+    const fontFamily = font.names.fontFamily['en'].toLowerCase().replace(' ', '');
+
+    const fontWeight = font.tables['os2']['usWeightClass'];
+    const fontStyle =
+      (font.tables['os2']['fsSelection'] & 1) === 1 ? 'italic' : 'regular';
+
+    let familyMap = fontMap.get(fontFamily);
+
+    if (familyMap === undefined) {
+      familyMap = new Map();
+      fontMap.set(fontFamily, familyMap);
+    }
+
+    let weightMap = familyMap.get(fontWeight);
+
+    if (weightMap === undefined) {
+      weightMap = new Map();
+      familyMap.set(fontWeight, weightMap);
+    }
+
+    weightMap.set(fontStyle, font);
   }
+}
+
+export async function loadRemoteFonts(apiKey: string): Promise<void> {
+  const response = await fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`);
+  const faces = await response.json();
 }
