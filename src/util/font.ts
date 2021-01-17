@@ -123,8 +123,7 @@ async function loadFont(container: FontContainer): Promise<Font | null> {
     const buf =
       container.remote
         ? await fetch(container.file)
-          .then(res => res.blob())
-          .then(blob => blob.arrayBuffer())
+          .then(res => res.arrayBuffer())
         : await readFile(container.file)
           .then(blob => blob.buffer);
 
