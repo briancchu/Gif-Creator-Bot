@@ -35,11 +35,13 @@ export function textToShapes(text: string, font: Font, size: number, options?: S
   return shape.toShapes(true);
 }
 
+type FontStyle = 'regular' | 'italic';
+
 /**
  * A map of maps of maps. Maps names -> font families -> font weights -> font
  * styles -> fonts.
  */
-export const fontMap = new Map();
+const fontMap = new Map<string, Map<number, Map<FontStyle, Font>>>();
 
 /**
  * Loads all of the fonts in the `src/fonts` folder and returns a mapping from
@@ -86,4 +88,31 @@ export async function loadLocalFonts(): Promise<void> {
 export async function loadRemoteFonts(apiKey: string): Promise<void> {
   const response = await fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`);
   const faces = await response.json();
+}
+
+// disable require-await for now; this function will be made async when I add
+// support for downloading fonts
+// eslint-disable-next-line @typescript-eslint/require-await
+export async function getFont(
+  fontFamily: string,
+  fontWeight = 500,
+  fontStyle: 'regular' | 'italic' = 'regular'
+): Promise<Font | null> {
+  const family = fontMap.get(fontFamily.toLowerCase().replace(' ', ''));
+  if (!family) return null;
+
+  // get the styles by weight, unless the font doesn't have that weight
+  const faces =
+    family.get(fontWeight)
+    // then try the normal font weight (500)
+    ?? family.get(500)
+    // if the font doesn't have that either, get the first font in the
+    // collection
+    ?? family.get(family.keys().next().value);
+  if (!faces) return null;
+
+  const font = faces.get(fontStyle) ?? faces.get('regular');
+  if (!font) return null;
+
+  return font;
 }
