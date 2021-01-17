@@ -150,17 +150,17 @@ export async function loadLocalFonts(): Promise<void> {
     if (!fontFilename.endsWith('.ttf')) continue;
 
     const path = join(fontDirectory, fontFilename);
-
-    const fontBuffer = await readFile(path);
-
-    const font = parse(fontBuffer.buffer);
+    const data = await readFile(path);
+    const font = parse(data.buffer);
 
     const family = (font.names as any).preferredFamily ?? font.names.fontFamily;
     const familyCode = family['en'].toLowerCase().replace(/\s+/g, '');
 
+    // https://docs.microsoft.com/en-us/typography/opentype/spec/os2#usweightclass
     const weight = font.tables['os2']['usWeightClass'];
-    const style =
-      (font.tables['os2']['fsSelection'] & 1) === 1 ? 'italic' : 'regular';
+    // https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
+    const style = (font.tables['os2']['fsSelection'] & 1) === 1
+      ? 'italic' : 'regular';
 
     let familyMap = fontMap.get(familyCode);
 
@@ -226,8 +226,8 @@ export async function loadRemoteFonts(apiKey: string): Promise<void> {
       // number like '700', or a three digit number followed by italic like
       // '500italic'
       const variantNumeric = parseInt(variant.slice(0, 3), 10);
-      const variantItalic = variant.endsWith('italic');
       if (variantNumeric) weight = variantNumeric;
+      const variantItalic = variant.endsWith('italic');
       if (variantItalic) style = 'italic';
 
       let weightMap = familyMap.get(weight);
@@ -278,7 +278,7 @@ export async function getFont(
   return loadFont(container);
 }
 
-export function getRandomFont(): Promise<Font> {
+export function getRandomFont(): Promise<Font | null> {
   const families = Array.from(fontMap.values());
   const family = families[Math.floor(Math.random() * families.length)];
   const faces = Array.from(family.values());
