@@ -61,7 +61,8 @@ export async function loadLocalFonts(): Promise<void> {
 
     const font = parse(fontBuffer.buffer);
 
-    const fontFamily = font.names.fontFamily['en'].toLowerCase().replace(' ', '');
+    let fontFamily = (font.names as any).preferredFamily ?? font.names.fontFamily;
+    fontFamily = fontFamily['en'].toLowerCase().replace(' ', '');
 
     const fontWeight = font.tables['os2']['usWeightClass'];
     const fontStyle =
@@ -104,11 +105,8 @@ export async function getFont(
   // get the styles by weight, unless the font doesn't have that weight
   const faces =
     family.get(fontWeight)
-    // then try the normal font weight (500)
-    ?? family.get(500)
-    // if the font doesn't have that either, get the first font in the
-    // collection
-    ?? family.get(family.keys().next().value);
+    // if the font doesn't have that, get the closest to the requested weight
+    ?? family.get(Array.from(family.keys()).sort((a, b) => Math.abs(a - fontWeight) - Math.abs(b - fontWeight))[0]);
   if (!faces) return null;
 
   const font = faces.get(fontStyle) ?? faces.get('regular');

@@ -5,15 +5,16 @@ import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
 import { promises } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
-import { parse, load } from 'opentype.js';
-import { fontMap, textToShapes } from './util/font';
+import { getFont, textToShapes } from './util/font';
 
-const { readFile, access, mkdir } = promises;
+const { access, mkdir } = promises;
 
 interface RendererOptions {
-  foreground?: string;
-  background?: string;
-  fontfamily?: string;
+  foreground: string;
+  background: string;
+  fontfamily: string;
+  fontweight: string;
+  fontstyle: string;
 }
 
 /**
@@ -23,15 +24,24 @@ interface RendererOptions {
  * disk.
  */
 export async function runRenderer(
-  input: string, options?: RendererOptions
+  input: string, options?: Partial<RendererOptions>
 ): Promise<string> {
   // put in the default options wherever they are not overriden by user-supplied
   // options
-  const { foreground, background, fontfamily } = Object.assign({
+  const {
+    foreground,
+    background,
+    fontfamily,
+    fontweight,
+    fontstyle,
+  } = {
     foreground: 'white',
     background: 'black',
     fontfamily: 'inter',
-  }, options ?? {});
+    fontweight: '500',
+    fontstyle: 'regular',
+    ...options,
+  } as RendererOptions;
 
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
@@ -51,7 +61,17 @@ export async function runRenderer(
 
   cam.position.z = 300;
 
-  const font = fontMap.get(fontfamily);
+  const font = await getFont(
+    fontfamily,
+    // parse font weight as a number, if that doesn't work
+    // then choose font weight 500
+    parseInt(fontweight, 10) || 500,
+    // pass in whatever font style, if it doesn't exist
+    // then it'll just give us the regular font
+    fontstyle as 'regular' | 'italic'
+  );
+
+  if (!font) throw new Error('could not find that font');
 
   // returns a string separated onto multiple lines based on max width
   function wrapText(text: string, fontSize: number, maxWidth: number) {
