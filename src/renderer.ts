@@ -5,14 +5,15 @@ import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
 import { promises } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
-import { parse } from 'opentype.js';
-import { textToShapes } from './util/font';
+import { parse, load } from 'opentype.js';
+import { fontMap, textToShapes } from './util/font';
 
 const { readFile, access, mkdir } = promises;
 
 interface RendererOptions {
   foreground?: string;
   background?: string;
+  fontfamily?: string;
 }
 
 /**
@@ -26,10 +27,11 @@ export async function runRenderer(
 ): Promise<string> {
   // put in the default options wherever they are not overriden by user-supplied
   // options
-  const { foreground, background } = Object.assign({
+  const { foreground, background, fontfamily } = Object.assign({
     foreground: 'white',
     background: 'black',
-  }, options ?? { });
+    fontfamily: 'inter',
+  }, options ?? {});
 
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
@@ -49,8 +51,7 @@ export async function runRenderer(
 
   cam.position.z = 300;
 
-  const fontData = await readFile('src/fonts/BalsamiqSans-Regular.ttf');
-  const font = parse(fontData.buffer);
+  const font = fontMap.get(fontfamily);
 
   // returns a string separated onto multiple lines based on max width
   function wrapText(text: string, fontSize: number, maxWidth: number) {

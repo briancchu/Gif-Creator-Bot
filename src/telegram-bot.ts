@@ -21,7 +21,7 @@ export async function runTelegramBot() {
     // sometimes it's more verbose, /gif@textgifcreatorbot
     if (input.startsWith('@textgifcreatorbot')) input = input.slice(18);
 
-    const  { options, text } = parseOptions(input);
+    const { options, text } = parseOptions(input);
 
     // Create gif using input
     const id = await runRenderer(text, options);

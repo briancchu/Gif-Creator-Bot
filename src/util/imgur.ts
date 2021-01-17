@@ -81,7 +81,7 @@ export async function getImageInfo(
   imgurImageId: string
 ): Promise<ImgurImageResponse> {
   const response = await fetch(
-    'https://api.imgur.com/3/image/' + imgurImageId, 
+    'https://api.imgur.com/3/image/' + imgurImageId,
     {
       method: 'GET',
       headers: {
