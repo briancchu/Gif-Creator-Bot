@@ -114,3 +114,12 @@ export async function getFont(
 
   return font;
 }
+
+export function getRandomFont(): Font {
+  const families = Array.from(fontMap.values());
+  const family = families[Math.floor(Math.random() * families.length)];
+  const faces = Array.from(family.values());
+  const face = faces[Math.floor(Math.random() * faces.length)];
+  const fonts = Array.from(face.values());
+  return fonts[Math.floor(Math.random() * fonts.length)];
+}
