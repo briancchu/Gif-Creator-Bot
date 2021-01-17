@@ -32,13 +32,14 @@ export async function runRenderer(
   const randForeground = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
   const randBackground = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
   const randSideColor = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
-  
+
   const {
     foreground,
     background,
     fontfamily,
     fontweight,
     fontstyle,
+    sidecolor,
   } = {
     foreground: randForeground,
     background: randBackground,
@@ -101,7 +102,7 @@ export async function runRenderer(
 
         // if adding the word to this line would fit, then add it, otherwise,
         // add it to the current line and keep the whitespace
-        if (font.getAdvanceWidth(futureLine, fontSize) < maxWidth) {
+        if (font!.getAdvanceWidth(futureLine, fontSize) < maxWidth) {
           currentLine = futureLine + character;
         } else {
           lines.push(currentLine);
