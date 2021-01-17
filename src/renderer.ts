@@ -11,6 +11,7 @@ const { access, mkdir } = promises;
 
 interface RendererOptions {
   foreground: string;
+  sidecolor: string;
   background: string;
   fontfamily: string;
   fontweight: string;
@@ -26,8 +27,12 @@ interface RendererOptions {
 export async function runRenderer(
   input: string, options?: Partial<RendererOptions>
 ): Promise<string> {
-  // put in the default options wherever they are not overriden by user-supplied
+  // put in random options wherever they are not overriden by user-supplied
   // options
+  const randForeground = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+  const randBackground = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+  const randSideColor = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+  
   const {
     foreground,
     background,
@@ -35,8 +40,9 @@ export async function runRenderer(
     fontweight,
     fontstyle,
   } = {
-    foreground: 'white',
-    background: 'black',
+    foreground: randForeground,
+    background: randBackground,
+    sidecolor: randSideColor,
     fontfamily: 'inter',
     fontweight: '500',
     fontstyle: 'regular',
@@ -159,8 +165,12 @@ export async function runRenderer(
 
   renderer.setClearColor(background, 1);
 
-  const material = new THREE.MeshPhongMaterial({ color: foreground });
-  const mesh = new THREE.Mesh(textGeometry, material);
+  const materials = [
+    new THREE.MeshBasicMaterial({ color: foreground }),
+    new THREE.MeshPhongMaterial({ color: sidecolor }),
+  ];
+
+  const mesh = new THREE.Mesh(textGeometry, materials);
 
   scene.add(mesh);
 
