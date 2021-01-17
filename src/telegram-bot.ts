@@ -37,7 +37,7 @@ export async function runTelegramBot() {
         { source: stream },
         { reply_to_message_id: ctx.message!.message_id });
     } catch (e) {
-      await ctx.reply(`Error: \`${e.message}\``);
+      await ctx.reply(`Error: \`${e.message}\`\n\`\`\`${e.stack}\`\`\``);
     }
   });
 
