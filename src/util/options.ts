@@ -6,7 +6,7 @@ interface Options {
 export function parseOptions(input: string): Options {
   // Regular expression matches options in the form "~color:red",
   // "~bgColor:red"
-  const pattern = /(?:~([a-z]+):([a-z\(\)0-9%,_"'-]+))/siug;
+  const pattern = /(?:~([a-z]+):([a-z\(\)0-9%,_"'#-]+))/siug;
 
   const options: Record<string, string> = {};
 

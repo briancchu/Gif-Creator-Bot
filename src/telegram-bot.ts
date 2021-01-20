@@ -23,18 +23,22 @@ export async function runTelegramBot() {
 
     const { options, text } = parseOptions(input);
 
+    try {
     // Create gif using input
-    const id = await runRenderer(text, options);
+      const id = await runRenderer(text, options);
 
-    await ctx.replyWithChatAction('upload_video');
+      await ctx.replyWithChatAction('upload_video');
 
-    // Get the buffer from the file name, assuming that the file exists
-    const stream = createReadStream(`output/${id}.mp4`);
+      // Get the buffer from the file name, assuming that the file exists
+      const stream = createReadStream(`output/${id}.mp4`);
 
-    await ctx.telegram.sendAnimation(
-      ctx.chat!.id,
-      { source: stream },
-      { reply_to_message_id: ctx.message!.message_id });
+      await ctx.telegram.sendAnimation(
+        ctx.chat!.id,
+        { source: stream },
+        { reply_to_message_id: ctx.message!.message_id });
+    } catch (e) {
+      await ctx.reply(`Error: \`${e.message}\`\n\`\`\`${e.stack}\`\`\``);
+    }
   });
 
   await bot.launch();
