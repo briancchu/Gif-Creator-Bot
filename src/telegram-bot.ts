@@ -1,6 +1,7 @@
 import { runRenderer } from './renderer';
 import { createReadStream } from 'fs';
 import TelegramBot from 'telegraf';
+import { parseOptions } from './util/options';
 
 export async function runTelegramBot() {
   const telegramToken = process.env['TELEGRAM_BOT_TOKEN'];
@@ -13,8 +14,17 @@ export async function runTelegramBot() {
   bot.command('gif', async (ctx) => {
     await ctx.replyWithChatAction('record_video');
 
+    let input = ctx.message!.text!;
+
+    // this input includes the slash command, /gif
+    if (input.startsWith('/gif')) input = input.slice(4);
+    // sometimes it's more verbose, /gif@textgifcreatorbot
+    if (input.startsWith('@textgifcreatorbot')) input = input.slice(18);
+
+    const  { options, text } = parseOptions(input);
+
     // Create gif using input
-    const id = await runRenderer(ctx.message!.text!);
+    const id = await runRenderer(text, options);
 
     await ctx.replyWithChatAction('upload_video');
 

@@ -2,8 +2,9 @@ import { Client, MessageAttachment } from 'discord.js';
 import { runRenderer } from './renderer';
 import { createReadStream } from 'fs';
 import { getImageInfo, uploadToImgur } from './util/imgur';
+import { parseOptions } from './util/options';
 
-export async function runDiscordBot() {
+export async function runDiscordBot(): Promise<void> {
   const client = new Client();
 
   const imgurClientId = process.env['IMGUR_CLIENT_ID'];
@@ -27,34 +28,12 @@ export async function runDiscordBot() {
 
     const input = rawInput.slice(1);
 
-    // Regular expression matches options in the form "~color:red",
-    // "~bgColor:red"
-    const pattern = /(?:~([a-z]+):([a-z\(\)0-9%,_"'-]+))/siug;
-
-    const options: Record<string, any> = {};
-    let optionMatch: RegExpExecArray | null;
-    let optionEnd = 0;
-
-    // get the next occurrence of the pattern in the string
-    while ((optionMatch = pattern.exec(input)) !== null) {
-      // stores first capturing group as key
-      const key = optionMatch[1];
-      // stores second capturing group as value
-      const value = optionMatch[2];
-      options[key] = value;
-
-      // index where user text will begin
-      optionEnd = optionMatch.index + optionMatch[0].length;
-    }
-
-    const text = input.slice(optionEnd);
-    const color = options.color as string;
-    const bgColor = options.bgcolor as string;
+    const  { options, text } = parseOptions(input);
 
     const reply = await message.channel.send('rendering your gif');
 
     // Create gif using input
-    const id = await runRenderer(text, color, bgColor);
+    const id = await runRenderer(text, options);
 
     // Get the buffer from the file name, assuming that the file exists
     const stream = createReadStream(`output/${id}.mp4`);
