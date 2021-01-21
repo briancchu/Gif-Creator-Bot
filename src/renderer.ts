@@ -5,14 +5,17 @@ import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
 import { promises } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
-import { parse } from 'opentype.js';
-import { textToShapes } from './util/font';
+import { getFont, textToShapes } from './util/font';
 
-const { readFile, access, mkdir } = promises;
+const { access, mkdir } = promises;
 
 interface RendererOptions {
-  foreground?: string;
-  background?: string;
+  foreground: string;
+  sidecolor: string;
+  background: string;
+  fontfamily: string;
+  fontweight: string;
+  fontstyle: string;
 }
 
 /**
@@ -22,14 +25,30 @@ interface RendererOptions {
  * disk.
  */
 export async function runRenderer(
-  input: string, options?: RendererOptions
+  input: string, options?: Partial<RendererOptions>
 ): Promise<string> {
-  // put in the default options wherever they are not overriden by user-supplied
+  // put in random options wherever they are not overriden by user-supplied
   // options
-  const { foreground, background } = Object.assign({
-    foreground: 'white',
-    background: 'black',
-  }, options ?? { });
+  const randForeground = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+  const randBackground = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+  const randSideColor = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+
+  const {
+    foreground,
+    background,
+    fontfamily,
+    fontweight,
+    fontstyle,
+    sidecolor,
+  } = {
+    foreground: randForeground,
+    background: randBackground,
+    sidecolor: randSideColor,
+    fontfamily: 'inter',
+    fontweight: '500',
+    fontstyle: 'regular',
+    ...options,
+  } as RendererOptions;
 
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
@@ -49,8 +68,17 @@ export async function runRenderer(
 
   cam.position.z = 300;
 
-  const fontData = await readFile('src/fonts/BalsamiqSans-Regular.ttf');
-  const font = parse(fontData.buffer);
+  const font = await getFont(
+    fontfamily,
+    // parse font weight as a number, if that doesn't work
+    // then choose font weight 500
+    parseInt(fontweight, 10) || 500,
+    // pass in whatever font style, if it doesn't exist
+    // then it'll just give us the regular font
+    fontstyle as 'regular' | 'italic'
+  );
+
+  if (!font) throw new Error('could not find that font');
 
   // returns a string separated onto multiple lines based on max width
   function wrapText(text: string, fontSize: number, maxWidth: number) {
@@ -74,7 +102,7 @@ export async function runRenderer(
 
         // if adding the word to this line would fit, then add it, otherwise,
         // add it to the current line and keep the whitespace
-        if (font.getAdvanceWidth(futureLine, fontSize) < maxWidth) {
+        if (font!.getAdvanceWidth(futureLine, fontSize) < maxWidth) {
           currentLine = futureLine + character;
         } else {
           lines.push(currentLine);
@@ -138,8 +166,12 @@ export async function runRenderer(
 
   renderer.setClearColor(background, 1);
 
-  const material = new THREE.MeshPhongMaterial({ color: foreground });
-  const mesh = new THREE.Mesh(textGeometry, material);
+  const materials = [
+    new THREE.MeshBasicMaterial({ color: foreground }),
+    new THREE.MeshPhongMaterial({ color: sidecolor }),
+  ];
+
+  const mesh = new THREE.Mesh(textGeometry, materials);
 
   scene.add(mesh);
 
