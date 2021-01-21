@@ -27,42 +27,42 @@ export function textToShapes(text: string, font: Font, size: number, options?: S
     let firstPoint;
 
     switch (command.type) {
-    case 'M':
-      firstPoint = {
-        x: command.x,
-        y: command.y,
-      };
-      shape.moveTo(command.x, command.y); break;
-    case 'L': {
-      const currentPoint = shape.currentPath.currentPoint as THREE.Vec2;
-      edgeSum += (command.x - currentPoint.x) * (command.y + currentPoint.y);
-      shape.lineTo(command.x, command.y);
-      break;
-    }
-    case 'C': {
-      const currentPoint = shape.currentPath.currentPoint as THREE.Vec2;
-      edgeSum += (command.x - currentPoint.x) * (command.y + currentPoint.y);
-      shape.bezierCurveTo(
-        command.x1, command.y1, command.x2, command.y2, command.x, command.y
-      );
-      break;
-    }
-    case 'Q': {
-      const currentPoint = shape.currentPath.currentPoint as THREE.Vec2;
-      edgeSum += (command.x - currentPoint.x) * (command.y + currentPoint.y);
-      shape.quadraticCurveTo(
-        command.x1, command.y1, command.x, command.y
-      );
-      break;
-    }
-    case 'Z': {
-      if (firstPoint) {
+      case 'M':
+        firstPoint = {
+          x: command.x,
+          y: command.y,
+        };
+        shape.moveTo(command.x, command.y); break;
+      case 'L': {
         const currentPoint = shape.currentPath.currentPoint as THREE.Vec2;
-        edgeSum += (firstPoint.x - currentPoint.x) * (firstPoint.y + currentPoint.y);
+        edgeSum += (command.x - currentPoint.x) * (command.y + currentPoint.y);
+        shape.lineTo(command.x, command.y);
+        break;
       }
-      shape.currentPath.closePath();
-      break;
-    }
+      case 'C': {
+        const currentPoint = shape.currentPath.currentPoint as THREE.Vec2;
+        edgeSum += (command.x - currentPoint.x) * (command.y + currentPoint.y);
+        shape.bezierCurveTo(
+          command.x1, command.y1, command.x2, command.y2, command.x, command.y
+        );
+        break;
+      }
+      case 'Q': {
+        const currentPoint = shape.currentPath.currentPoint as THREE.Vec2;
+        edgeSum += (command.x - currentPoint.x) * (command.y + currentPoint.y);
+        shape.quadraticCurveTo(
+          command.x1, command.y1, command.x, command.y
+        );
+        break;
+      }
+      case 'Z': {
+        if (firstPoint) {
+          const currentPoint = shape.currentPath.currentPoint as THREE.Vec2;
+          edgeSum += (firstPoint.x - currentPoint.x) * (firstPoint.y + currentPoint.y);
+        }
+        shape.currentPath.closePath();
+        break;
+      }
     }
   }
 

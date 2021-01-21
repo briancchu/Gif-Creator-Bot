@@ -5,7 +5,8 @@ import { FakeCanvas } from './util/canvas';
 import { PassThrough } from 'stream';
 import { promises } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
-import { getFont, textToShapes } from './util/font';
+import type { Font } from 'opentype.js';
+import { getFont, textToShapes, getRandomFont } from './util/font';
 
 const { access, mkdir } = promises;
 
@@ -44,11 +45,34 @@ export async function runRenderer(
     foreground: randForeground,
     background: randBackground,
     sidecolor: randSideColor,
-    fontfamily: 'inter',
-    fontweight: '500',
-    fontstyle: 'regular',
     ...options,
   } as RendererOptions;
+
+  let font: Font;
+
+  if (fontfamily) {
+    const userFont = await getFont(
+      fontfamily,
+      // parse font weight as a number, if that doesn't work
+      // then choose font weight 500
+      parseInt(fontweight, 10) || 500,
+      // pass in whatever font style, if it doesn't exist
+      // then it'll just give us the regular font
+      fontstyle as 'regular' | 'italic'
+    );
+
+    if (!userFont) throw new Error('could not find that font');
+
+    font = userFont;
+  } else {
+    const randomFont = await getRandomFont();
+
+    if (randomFont) {
+      font = randomFont;
+    } else {
+      font = (await getFont('Inter', 500, 'regular'))!;
+    }
+  }
 
   // How many frames and how large shall the GIF be?
   const NUM_FRAMES = 200, WIDTH = 500, HEIGHT = 500;
@@ -67,18 +91,6 @@ export async function runRenderer(
   });
 
   cam.position.z = 300;
-
-  const font = await getFont(
-    fontfamily,
-    // parse font weight as a number, if that doesn't work
-    // then choose font weight 500
-    parseInt(fontweight, 10) || 500,
-    // pass in whatever font style, if it doesn't exist
-    // then it'll just give us the regular font
-    fontstyle as 'regular' | 'italic'
-  );
-
-  if (!font) throw new Error('could not find that font');
 
   // returns a string separated onto multiple lines based on max width
   function wrapText(text: string, fontSize: number, maxWidth: number) {
