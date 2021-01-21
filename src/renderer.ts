@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { Font } from 'opentype.js';
 import { getFont, textToShapes, getRandomFont } from './util/font';
 
-const { access, mkdir } = promises;
+const { access, mkdir, readFile } = promises;
 
 interface RendererOptions {
   foreground: string;
@@ -178,9 +178,21 @@ export async function runRenderer(
 
   renderer.setClearColor(background, 1);
 
+  const vertexShader = await readFile('src/shader/vertex.glsl', 'utf-8');
+  const fragmentShader = await readFile('src/shader/fragment.glsl', 'utf-8');
+
+  const shaderMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      time: { value: 0.0 },
+    },
+    vertexShader,
+    fragmentShader,
+  });
+
   const materials = [
-    new THREE.MeshBasicMaterial({ color: foreground }),
-    new THREE.MeshPhongMaterial({ color: sidecolor }),
+    shaderMaterial,
+    shaderMaterial,
+    // new THREE.MeshPhongMaterial({ color: sidecolor }),
   ];
 
   const mesh = new THREE.Mesh(textGeometry, materials);
@@ -221,6 +233,8 @@ export async function runRenderer(
 
     for (let frame = 0; frame < NUM_FRAMES; frame++) {
       mesh.rotation.y += Math.PI / 100;
+
+      shaderMaterial.uniforms.time.value = frame / 60;
 
       renderer.render(scene, cam); // render a frame in memory
 
